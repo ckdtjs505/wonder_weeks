@@ -1,13 +1,45 @@
 import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import { router } from 'expo-router';
 
 export default function userInputModal() {
 
     const [name, setName] = useState('');
     const [birthDay, setBirthDay] = useState('');
 
+    // 데이터를 불러오고 상태를 설정하는 비동기 함수
+    const loadInitialData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('baby-info');
+            if (jsonValue != null) {
+                const savedData = JSON.parse(jsonValue);
+                setName(savedData.name || ''); // 값이 없으면 빈 문자열
+                setBirthDay(savedData.birthDay || '');
+            }
+        } catch (e) {
+            console.error('초기 데이터 불러오기 실패:', e);
+        }
+    };
+
+    // useEffect로 컴포넌트가 렌더링될 때 초기 데이터 로드
+    useEffect(() => {
+        loadInitialData();
+    }, []); // 빈 배열로 첫 렌더링 시 한 번만 실행
+
+    // 데이터 저장 함수
+    const storeData = async () => {
+        try {
+            const jsonValue = JSON.stringify({ name, birthDay });
+            await AsyncStorage.setItem('baby-info', jsonValue);
+        } catch (e) {
+            console.error('저장 실패:', e);
+        }
+    };
+
     const handlePress = () => {
-        Alert.alert('입력 정보', `아이 이름: ${name}\n태어난날: ${birthDay}`);
+        storeData();
+        router.replace('/')
     }
     return <View style={styles.container}>
         <View style={styles.form}>
