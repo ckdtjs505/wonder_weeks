@@ -28,9 +28,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === 'dark' ? DefaultTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="userInputModal" options={{
+          presentation: "modal",
+          title: '아이 정보 입력'
+        }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
