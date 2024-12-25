@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Text, View } from 'react-native';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,10 +31,22 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DefaultTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" options={{
+          headerShown: true,
+          autoHideHomeIndicator: true,
+          headerTitleAlign: 'center',
+          title: "원더윅스 계산기",
+          headerStyle: {
+            backgroundColor : '#71C9CE',
+          },
+          headerTitleStyle : {
+            color: '#ffffff'
+          },          
+        }} />
         <Stack.Screen name="userInputModal" options={{
           presentation: "modal",
-          title: '아이 정보 입력'
+          title: '아이 정보 입력',
+          
         }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
