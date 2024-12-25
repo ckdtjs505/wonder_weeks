@@ -1,12 +1,14 @@
-import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 export default function userInputModal() {
 
     const [name, setName] = useState('');
     const [birthDay, setBirthDay] = useState('');
+    const [isShowPicker, setIsShowPicker] = useState(false);
 
     // 데이터를 불러오고 상태를 설정하는 비동기 함수
     const loadInitialData = async () => {
@@ -41,6 +43,10 @@ export default function userInputModal() {
         storeData();
         router.replace('/')
     }
+
+    const toogleTimePicker = () => {
+        setIsShowPicker(!isShowPicker)
+    }
     return <View style={styles.container}>
         <View style={styles.form}>
             <Text style={styles.label} > 아이 이름  </Text>
@@ -52,12 +58,28 @@ export default function userInputModal() {
             </TextInput>
 
             <Text style={styles.label}> 태어난날  </Text>
-            <TextInput 
-                style={styles.input} 
-                placeholder='2024-11-11' 
-                value={birthDay} 
-                onChangeText={ (text) =>{ setBirthDay(text) }}>
-            </TextInput>
+            { !isShowPicker ? <Pressable
+                style={styles.input}
+                onPress={toogleTimePicker}
+                >
+                <TextInput 
+                    placeholder='2024-11-11' 
+                    value={birthDay} 
+                    editable={false}
+                >
+                </TextInput>
+            </Pressable> : ''}
+            
+            { isShowPicker ?  <RNDateTimePicker 
+            value={new Date()}
+            onChange={ ({type}, day) => {
+                if( type === "set" && day){
+                    setBirthDay(day.toISOString().split('T')[0]); // yyyy-MM-dd 형식으로 저장
+                }
+                toogleTimePicker()
+            }}
+            /> : ''}
+
             
         </View>
         <TouchableOpacity style={styles.button} onPress={handlePress}>
