@@ -1,46 +1,16 @@
 import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { useBabyInfo } from '@/store/store';
 
 export default function userInputModal() {
-
-    const [name, setName] = useState('');
-    const [birthDay, setBirthDay] = useState('');
+    const baby = useBabyInfo();
     const [isShowPicker, setIsShowPicker] = useState(false);
-
-    // 데이터를 불러오고 상태를 설정하는 비동기 함수
-    const loadInitialData = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem('baby-info');
-            if (jsonValue != null) {
-                const savedData = JSON.parse(jsonValue);
-                setName(savedData.name || ''); // 값이 없으면 빈 문자열
-                setBirthDay(savedData.birthDay || '');
-            }
-        } catch (e) {
-            console.error('초기 데이터 불러오기 실패:', e);
-        }
-    };
-
-    // useEffect로 컴포넌트가 렌더링될 때 초기 데이터 로드
-    useEffect(() => {
-        loadInitialData();
-    }, []); // 빈 배열로 첫 렌더링 시 한 번만 실행
-
-    // 데이터 저장 함수
-    const storeData = async () => {
-        try {
-            const jsonValue = JSON.stringify({ name, birthDay });
-            await AsyncStorage.setItem('baby-info', jsonValue);
-        } catch (e) {
-            console.error('저장 실패:', e);
-        }
-    };
+    const [name, setName] = useState(baby.name)
 
     const handlePress = () => {
-        storeData();
+        baby.setName(name);
         router.dismissAll(); // 모든 스택을 제거하고 홈 화면으로 이동
         router.replace('/'); // 홈 화면으로 전환
     }
@@ -65,7 +35,7 @@ export default function userInputModal() {
                 >
                 <TextInput 
                     placeholder='2024-11-11' 
-                    value={birthDay} 
+                    value={baby.birthDay} 
                     editable={false}
                 >
                 </TextInput>
@@ -75,7 +45,7 @@ export default function userInputModal() {
             value={new Date()}
             onChange={ ({type}, day) => {
                 if( type === "set" && day){
-                    setBirthDay(day.toISOString().split('T')[0]); // yyyy-MM-dd 형식으로 저장
+                    baby.setBirthDay(day.toISOString().split('T')[0]); // yyyy-MM-dd 형식으로 저장
                 }
                 toogleTimePicker()
             }}

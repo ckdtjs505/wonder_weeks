@@ -1,4 +1,5 @@
 import { getWonderweeks } from "@/hooks/getWonderweeks";
+import { useBabyInfo } from "@/store/store";
 import { router } from "expo-router";
 import { Button, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
@@ -25,17 +26,19 @@ LocaleConfig.locales['ko'] = {
 LocaleConfig.defaultLocale = 'ko';
 
 export default function Home(){
+  const state = useBabyInfo();
+  
   const handleModalButton = () => {
     router.push('/userInputModal')
   }
 
   const wonderweeks = getWonderweeks({
-    day : '2024-11-11',
+    day : state.birthDay,
     color : '#71C9CE'
   });
 
   return <View>
-    <Text>Home </Text>
+    <Text>{state.name} {state.birthDay} </Text>
 
     <Calendar
       markingType={'period'}
