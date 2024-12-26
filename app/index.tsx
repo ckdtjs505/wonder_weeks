@@ -1,7 +1,7 @@
 import { getWonderweeks } from "@/hooks/getWonderweeks";
 import { useBabyInfo } from "@/store/store";
 import { router } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 LocaleConfig.locales['ko'] = {
   monthNames: [
@@ -36,9 +36,12 @@ export default function Home(){
     day : state.birthDay,
     color : '#71C9CE'
   });
+  
+  const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]])
 
   return <View>
-    <Text>{state.name} {state.birthDay} </Text>
+    <Text style={styles.title}>오늘은 {
+    isWonderweeks ?  "원더윅스입니다" :"원더윅스가 아닙니다" }  </Text>
 
     <Calendar
       markingType={'period'}
@@ -52,3 +55,28 @@ export default function Home(){
     <Button title="모달" onPress={handleModalButton}></Button>
   </View>
 }
+
+const styles = StyleSheet.create({
+  container : { 
+      // alignItems: 'center',
+      // justifyContent: 'space-between', // 상단과 하단 분리
+      // backgroundColor: '#fff',
+  }, 
+  calender : {
+    height: '90%',
+    width: '90%',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+  },
+  theme : {
+  },
+  titleBox: {
+    flex : 1,
+    justifyContent: 'center'
+  },
+  title : {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 20
+  }
+})

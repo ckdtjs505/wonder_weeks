@@ -39,7 +39,7 @@ export default function RootLayout() {
           headerShown: true,
           autoHideHomeIndicator: true,
           headerTitleAlign: 'center',
-          title: "원더윅스 계산기",
+          title: `${baby.name}'s 원더윅스`,
           headerStyle: {
             backgroundColor : '#71C9CE',
           },
