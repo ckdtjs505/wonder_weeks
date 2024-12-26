@@ -41,7 +41,8 @@ export default function userInputModal() {
 
     const handlePress = () => {
         storeData();
-        router.replace('/')
+        router.dismissAll(); // 모든 스택을 제거하고 홈 화면으로 이동
+        router.replace('/'); // 홈 화면으로 전환
     }
 
     const toogleTimePicker = () => {
