@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { getWonderweeks } from "@/hooks/getWonderweeks";
 import { useBabyInfo } from "@/store/store";
 import { router } from "expo-router";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 LocaleConfig.locales['ko'] = {
   monthNames: [
@@ -35,26 +35,31 @@ export default function Home(){
 
   const wonderweeks = getWonderweeks({
     day : state.birthDay,
-    color : '#71C9CE'
     color : Colors.theme[1],
+    textColor: '#ffffff'
   });
   
-  const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]])
-
+  const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]].weeks);
+  
   return <View>
     <Text style={styles.title}>오늘은 {
-    isWonderweeks ?  "원더윅스입니다" :"원더윅스가 아닙니다" }  </Text>
-
+    isWonderweeks ?  "원더데이!" :"원더데이가 아닙니다" }  </Text>
     <Calendar
+      style={styles.calender}
       markingType={'period'}
       markedDates={{
-        ...wonderweeks
+        ...wonderweeks,
+      }}
+
+      onDayPress={day => {
+        console.log(day)
       }}
 
       enableSwipeMonths={true}
       hideArrows={false}
+      hideExtraDays={true}
     />
-    <Button title="모달" onPress={handleModalButton}></Button>
+    {/* <Button title="모달" onPress={handleModalButton}></Button> */}
   </View>
 }
 
@@ -65,10 +70,13 @@ const styles = StyleSheet.create({
       // backgroundColor: '#fff',
   }, 
   calender : {
-    height: '90%',
+    height: '80%',
     width: '90%',
     marginRight: 'auto',
     marginLeft: 'auto',
+    borderRadius: 10,
+    borderColor: Colors.theme.header,
+    borderWidth: 0.5
   },
   theme : {
   },

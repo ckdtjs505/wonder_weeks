@@ -1,4 +1,4 @@
-export const getWonderweeks = ({day, color } : any) => {
+export const getWonderweeks = ({day, ...etc } : any) => {
     const birthDate = new Date(day);
     
     // 주차별 범위 정의 (시작 주 ~ 종료 주)
@@ -34,15 +34,21 @@ export const getWonderweeks = ({day, color } : any) => {
     
             const currentDateStr = currentDate.toISOString().split('T')[0]; // ISO 형식으로 날짜 키 생성
 
-            if( currentDateStr )
             // 각 날짜를 객체에 추가
             result[currentDateStr] = {
+                weeks : range,
                 startingDay: currentDate.toDateString() === startDay.toDateString(),
                 endingDay: currentDate.toDateString() === endDay.toDateString(),
-                color : color
+                ...etc,
             };
         }
     }
+
+    const today = new Date().toISOString().split('T')[0];
+
+    result[today] = {
+        marked: true,
+    };
     
     return result;
 }
