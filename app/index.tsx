@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { getWonderweeks } from "@/hooks/getWonderweeks";
 import { useBabyInfo } from "@/store/store";
 import { router } from "expo-router";
@@ -35,6 +36,7 @@ export default function Home(){
   const wonderweeks = getWonderweeks({
     day : state.birthDay,
     color : '#71C9CE'
+    color : Colors.theme[1],
   });
   
   const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]])

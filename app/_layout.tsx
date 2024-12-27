@@ -9,6 +9,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Text, View } from 'react-native';
 import { useBabyInfo } from '@/store/store';
+import { Colors } from '@/constants/Colors';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -41,7 +42,7 @@ export default function RootLayout() {
           headerTitleAlign: 'center',
           title: `${baby.name}'s 원더윅스`,
           headerStyle: {
-            backgroundColor : '#71C9CE',
+            backgroundColor : Colors.theme[1],
           },
           headerTitleStyle : {
             color: '#ffffff'
