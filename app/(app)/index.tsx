@@ -82,7 +82,6 @@ export default function Home(){
           })
         }
 
-        console.log(selectedDateInfo)
       }}
 
       enableSwipeMonths={true}

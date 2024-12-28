@@ -23,7 +23,6 @@ export default function AppLayout() {
         SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
     });
 
-    console.log('AppLayout')
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -57,7 +56,6 @@ export default function AppLayout() {
     }
 
     if (!baby || baby.name === "") {
-        console.log(baby.name)
         return <Redirect href="/userInputModal" />;
     }
 
