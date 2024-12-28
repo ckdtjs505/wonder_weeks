@@ -2,9 +2,9 @@ import WonderDayModal from "@/components/WonderDayModal";
 import { Colors } from "@/constants/Colors";
 import { getWonderweeks } from "@/hooks/getWonderweeks";
 import { useBabyInfo } from "@/store/store";
-import { router } from "expo-router";
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Redirect, router, useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 LocaleConfig.locales['ko'] = {
   monthNames: [
@@ -47,7 +47,7 @@ export default function Home(){
     textColor: '#ffffff'
   });
   const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]].weeks);
-  
+
   return <View>
     <Text style={styles.title}>오늘은 {
     isWonderweeks ?  "원더데이!" :"원더데이가 아닙니다" }  </Text>
@@ -81,7 +81,6 @@ export default function Home(){
             weeks : '',
           })
         }
-       
 
         console.log(selectedDateInfo)
       }}
@@ -90,7 +89,7 @@ export default function Home(){
       hideArrows={false}
       hideExtraDays={true}
     />
-    {/* <Button title="모달" onPress={handleModalButton}></Button> */}
+    <Button title="모달" onPress={handleModalButton}></Button>
   </View>
 }
 
