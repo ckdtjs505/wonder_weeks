@@ -38,7 +38,7 @@ export default function Home(){
   })
   const [ showWonderModal, setShowWonderModal ] = useState(false);  
   const handleModalButton = () => {
-    router.push('/userInputModal')
+    router.push('/settings')
   }
 
   const wonderweeks = getWonderweeks({

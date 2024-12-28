@@ -15,7 +15,7 @@ export default function WonderDayModal({ isVisible, onClose, selectedDate, selec
     <Modal animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.modalContent}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>원더윅스 {selectedDateInfo.weeks}차 - {selectedDateInfo.title}</Text>
+          <Text style={styles.title}>원더윅스 {selectedDateInfo.weeks} - {selectedDateInfo.title}</Text>
           <Pressable onPress={onClose}>
             <MaterialIcons name="close" color="#fff" size={22} />
           </Pressable>

@@ -1,15 +1,18 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Redirect, Stack } from 'expo-router';
+import { Redirect, router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Text, View } from 'react-native';
+import { Alert, Button, Text, Touchable, TouchableOpacity, View } from 'react-native';
 import { useBabyInfo } from '@/store/store';
 import { Colors } from '@/constants/Colors';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
 /**
  * app 레이아웃
  */
@@ -64,9 +67,27 @@ export default function AppLayout() {
             <Stack>
                 <Stack.Screen name="index" options={{
                     headerShown: true,
-                    autoHideHomeIndicator: true,
                     headerTitleAlign: 'center',
                     title: `${baby.name}'s 원더윅스`,
+                    headerStyle: {
+                        backgroundColor: Colors.theme[1],
+                    },
+                    headerTitleStyle: {
+                        color: '#ffffff'
+                    },
+                    headerRight : (e) => 
+                        <TouchableOpacity
+                            onPressIn={ () =>router.push('/settings')}>
+                            <MaterialIcons   name='settings' color={"white"} size={20}></MaterialIcons> 
+                        </TouchableOpacity>
+                    ,
+
+                }}>
+                </Stack.Screen>
+                <Stack.Screen name="settings" options={{
+                    headerShown: true,
+                    headerTitleAlign: 'center',
+                    title: '설정',
                     headerStyle: {
                         backgroundColor: Colors.theme[1],
                     },
