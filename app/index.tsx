@@ -1,7 +1,9 @@
+import WonderDayModal from "@/components/WonderDayModal";
 import { Colors } from "@/constants/Colors";
 import { getWonderweeks } from "@/hooks/getWonderweeks";
 import { useBabyInfo } from "@/store/store";
 import { router } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 LocaleConfig.locales['ko'] = {
@@ -28,7 +30,13 @@ LocaleConfig.defaultLocale = 'ko';
 
 export default function Home(){
   const state = useBabyInfo();
-  
+  const [ selectedDateInfo, setSelectedDateInfo] = useState({
+    problem : '',
+    solution : '',
+    weeks : '',
+    title : ''
+  })
+  const [ showWonderModal, setShowWonderModal ] = useState(false);  
   const handleModalButton = () => {
     router.push('/userInputModal')
   }
@@ -38,12 +46,16 @@ export default function Home(){
     color : Colors.theme[1],
     textColor: '#ffffff'
   });
-  
   const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]].weeks);
   
   return <View>
     <Text style={styles.title}>오늘은 {
     isWonderweeks ?  "원더데이!" :"원더데이가 아닙니다" }  </Text>
+
+    {showWonderModal ? <WonderDayModal selectedDateInfo={selectedDateInfo} onClose={ () => {
+      setShowWonderModal(!showWonderModal)
+    }}></WonderDayModal> : ''}
+
     <Calendar
       style={styles.calender}
       markingType={'period'}
@@ -52,7 +64,26 @@ export default function Home(){
       }}
 
       onDayPress={day => {
-        console.log(day)
+        
+        if( wonderweeks?.[day.dateString] && wonderweeks?.[day.dateString].problem  ){
+          setSelectedDateInfo({ 
+            weeks : wonderweeks?.[day.dateString].weeks,
+            problem : wonderweeks?.[day.dateString].problem,
+            solution : wonderweeks?.[day.dateString].solution,
+            title :  wonderweeks?.[day.dateString].title,
+          })
+
+          setShowWonderModal(!showWonderModal)
+        }else {
+          setSelectedDateInfo({ 
+            problem :'',
+            solution : '',
+            weeks : '',
+          })
+        }
+       
+
+        console.log(selectedDateInfo)
       }}
 
       enableSwipeMonths={true}
