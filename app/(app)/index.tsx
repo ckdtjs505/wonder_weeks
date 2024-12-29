@@ -37,9 +37,6 @@ export default function Home(){
     title : ''
   })
   const [ showWonderModal, setShowWonderModal ] = useState(false);  
-  const handleModalButton = () => {
-    router.push('/settings')
-  }
 
   const wonderweeks = getWonderweeks({
     day : state.birthDay,
@@ -88,7 +85,6 @@ export default function Home(){
       hideArrows={false}
       hideExtraDays={true}
     />
-    <Button title="모달" onPress={handleModalButton}></Button>
   </View>
 }
 
