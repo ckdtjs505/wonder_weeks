@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "wonder_weeks",
-    "slug": "wonder_weeks",
+    "name": "원더윅스달력",
+    "slug": "원더윅스달력",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
