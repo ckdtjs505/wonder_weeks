@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/Colors";
+
 export const getWonderweeks = ({day, ...etc } : any) => {
     const birthDate = new Date(day);
     
@@ -80,7 +82,9 @@ export const getWonderweeks = ({day, ...etc } : any) => {
     const today = new Date().toISOString().split('T')[0];
 
     result[today] = {
+        ...result[today],
         marked: true,
+        dotColor: Colors.theme[2]
     };
     
     return result;

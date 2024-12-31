@@ -27,5 +27,6 @@ export const Colors = {
   theme : {
     header : "#71C9CE",
     1 : '#3ABEF9',
+    2 : '#365486'
   }
 };

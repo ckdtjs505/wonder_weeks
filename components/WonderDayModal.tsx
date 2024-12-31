@@ -10,7 +10,6 @@ type Props = PropsWithChildren<{
 }>;
 
 export default function WonderDayModal({ isVisible, onClose, selectedDate, selectedDateInfo }: Props) {
-  console.log(selectedDate)
   return (
     <Modal animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.modalContent}>
