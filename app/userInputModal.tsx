@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { useBabyInfo } from '@/store/store';
+import { Colors } from '@/constants/Colors';
 
 export default function userInputModal() {
     const baby = useBabyInfo();
@@ -18,6 +19,12 @@ export default function userInputModal() {
         setIsShowPicker(!isShowPicker)
     }
     return <View style={styles.container}>
+
+        <View>
+            <Text style={styles.title}>원더윅스 </Text>
+            <Text style={styles.subTitle}>계산기 </Text>
+        </View>
+
         <View style={styles.form}>
             <Text style={styles.label} > 아이 이름  </Text>
             <TextInput 
@@ -50,11 +57,11 @@ export default function userInputModal() {
             }}
             /> : ''}
 
-            
+            <TouchableOpacity style={styles.button} onPress={handlePress}>
+                <Text style={styles.buttonText}>입력완료 </Text>
+            </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-            <Text style={styles.buttonText}>입력완료 </Text>
-        </TouchableOpacity>
+
     </View>
 }
 
@@ -62,13 +69,22 @@ const styles = StyleSheet.create({
     container : { 
         flex: 1, 
         alignItems: 'center',
-        justifyContent: 'space-between', // 상단과 하단 분리
+        justifyContent: 'space-around', // 상단과 하단 분리
         backgroundColor: '#fff',
         padding: 20,
     }, 
     content : {
         flexDirection: 'row',
         justifyContent: 'space-around'
+    },
+    title: {
+        fontSize: 40,
+        textAlign: 'center'
+    },
+    subTitle: {
+        fontSize : 30,
+        textAlign: 'center'
+
     },
     form : {
         width: '90%',
@@ -83,12 +99,18 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         margin: 10,
+        height: 40,
+        justifyContent: 'center',
+        paddingLeft: 10
     },
     button: {
-        backgroundColor: '#ff3a67', // 버튼 배경색 ff3a67
+        backgroundColor: Colors.theme[1], // 버튼 배경색 ff3a67
         padding: 10,
         borderRadius: 5,
         width: '85%',
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: 20,
         alignItems: 'center',
     },
     buttonText: {

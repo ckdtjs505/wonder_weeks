@@ -1,16 +1,22 @@
+import { router } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Switch, Text, View } from "react-native"
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native"
 
 export default function settings(){
     const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const toggleSwitch = () => {
+        setIsEnabled(previousState => !previousState);
+    }
+    const handleChangeName = () => {
+        router.push('/userInputModal')
+    }
 
     return <View>
         <View style={styles.row}>
             <Text style={styles.label} > 알람 </Text>
             <Switch
-                trackColor={{false: '#767577', true: '#81b0ff'}}
-                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                trackColor={{false: '#767577', true: '#767577'}}
+                thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleSwitch}
                 value={isEnabled}
@@ -18,12 +24,14 @@ export default function settings(){
         </View>
 
         <View style={styles.row}>
-            <Text style={styles.label} > 아이이름 변경하기  </Text>
+            <TouchableOpacity onPress={ handleChangeName}>
+                <Text style={styles.label} > 아이이름 변경하기  </Text>
+            </TouchableOpacity>
         </View>
 
-        <View style={styles.row}>
+        {/* <View style={styles.row}>
             <Text style={styles.label} > 광고 지우기  </Text>
-        </View>
+        </View> */}
     </View>
 }
 
