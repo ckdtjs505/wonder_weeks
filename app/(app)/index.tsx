@@ -6,6 +6,7 @@ import { Redirect, router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
+import * as Notifications from 'expo-notifications';
 LocaleConfig.locales['ko'] = {
   monthNames: [
     '1월',
@@ -45,6 +46,40 @@ export default function Home(){
   });
   const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]].weeks);
 
+  console.log(wonderweeks[new Date().toISOString().split('T')[0]])
+  // Second, call scheduleNotificationAsync()
+  const sendNotification = () => {
+    console.log('sendNotification')
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: '원더데이',
+        body: `오늘은 ${isWonderweeks ?  "원더데이!" :"원더데이가 아닙니다"}`,
+      },
+      trigger: {
+        type: "daily",
+        hour: 22,
+        minute: 10,
+      },
+    });
+  }
+
+  useEffect(() => {
+    // ✅ 알림 전송 함수 호출
+    sendNotification();
+
+    const subscription = Notifications.addNotificationReceivedListener((notification) => {
+      // ✅ 알림이 수신된 경우 처리할 코드
+      console.log('알림 전송 완료', notification);
+      Notifications.cancelAllScheduledNotificationsAsync()
+      console.log('finish')
+
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+  
   return <View>
     <Text style={styles.title}>오늘은 {
     isWonderweeks ?  "원더데이!" :"원더데이가 아닙니다" }  </Text>
@@ -58,6 +93,7 @@ export default function Home(){
       markingType={'period'}
       markedDates={{
         ...wonderweeks,
+        
       }}
 
       onDayPress={day => {
