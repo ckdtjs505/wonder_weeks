@@ -33,3 +33,14 @@ export const useBabyInfo = create((set) => ({
         set({ birthDay: value });
     },
 }));
+
+export const useNotiInfo = create((set) => ({
+    isOn: true,
+    // 이름 업데이트
+    on: () => {
+        set({ isOn: true });
+    },
+    off: () => {
+        set({ isOn: false });
+    }
+}));

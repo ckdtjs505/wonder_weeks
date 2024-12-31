@@ -1,11 +1,22 @@
+import { useNotiInfo } from "@/store/store";
 import { router } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native"
 
 export default function settings(){
-    const [isEnabled, setIsEnabled] = useState(false);
+    const noti = useNotiInfo()
+    const [isEnabled, setIsEnabled] = useState(noti.isOn);
+
     const toggleSwitch = () => {
         setIsEnabled(previousState => !previousState);
+        if( isEnabled ){
+            console.log('off')
+            noti.off()
+        }else{
+            console.log('on')
+            noti.on()
+        }
+
     }
     const handleChangeName = () => {
         router.push('/userInputModal')

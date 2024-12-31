@@ -1,7 +1,7 @@
 import WonderDayModal from "@/components/WonderDayModal";
 import { Colors } from "@/constants/Colors";
 import { getWonderweeks } from "@/hooks/getWonderweeks";
-import { useBabyInfo } from "@/store/store";
+import { useBabyInfo, useNotiInfo } from "@/store/store";
 import { Redirect, router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
@@ -31,6 +31,7 @@ LocaleConfig.defaultLocale = 'ko';
 
 export default function Home(){
   const state = useBabyInfo();
+  const noti = useNotiInfo();
   const [ selectedDateInfo, setSelectedDateInfo] = useState({
     problem : '',
     solution : '',
@@ -46,7 +47,6 @@ export default function Home(){
   });
   const isWonderweeks = Boolean(wonderweeks[new Date().toISOString().split('T')[0]].weeks);
 
-  console.log(wonderweeks[new Date().toISOString().split('T')[0]])
   // Second, call scheduleNotificationAsync()
   const sendNotification = () => {
     console.log('sendNotification')
@@ -57,28 +57,32 @@ export default function Home(){
       },
       trigger: {
         type: "daily",
-        hour: 22,
-        minute: 10,
+        hour: 9,
+        minute: 0,
       },
     });
   }
 
   useEffect(() => {
-    // ✅ 알림 전송 함수 호출
-    sendNotification();
-
     const subscription = Notifications.addNotificationReceivedListener((notification) => {
       // ✅ 알림이 수신된 경우 처리할 코드
       console.log('알림 전송 완료', notification);
-      Notifications.cancelAllScheduledNotificationsAsync()
-      console.log('finish')
-
     });
+    
+    if(noti.isOn){
+      // ✅ 알림 전송 함수 호출
+      if( isWonderweeks ){
+        Notifications.cancelAllScheduledNotificationsAsync()
+        sendNotification();
+      }
+    }else {
+      Notifications.cancelAllScheduledNotificationsAsync()
+    }
 
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [noti.isOn]);
   
   return <View>
     <Text style={styles.title}>오늘은 {
