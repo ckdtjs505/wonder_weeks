@@ -3,10 +3,15 @@ import { Colors } from "@/constants/Colors";
 import { getWonderweeks } from "@/hooks/getWonderweeks";
 import { useBabyInfo, useNotiInfo } from "@/store/store";
 import { Redirect, router, useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import * as Notifications from 'expo-notifications';
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-3739053005473702/2729900884';
+
+
 LocaleConfig.locales['ko'] = {
   monthNames: [
     '1월',
@@ -83,7 +88,16 @@ export default function Home(){
       subscription.remove();
     };
   }, [noti.isOn]);
-  
+
+
+  const bannerRef = useRef<BannerAd>(null);
+
+  // (iOS) WKWebView can terminate if app is in a "suspended state", resulting in an empty banner when app returns to foreground.
+  // Therefore it's advised to "manually" request a new ad when the app is foregrounded (https://groups.google.com/g/google-admob-ads-sdk/c/rwBpqOUr8m8).
+  useForeground(() => {
+    Platform.OS === 'ios' && bannerRef.current?.load();
+  })
+
   return <View>
     <Text style={styles.title}>오늘은 {
     isWonderweeks ?  "원더데이!" :"원더데이가 아닙니다" }  </Text>
@@ -125,6 +139,9 @@ export default function Home(){
       hideArrows={false}
       hideExtraDays={true}
     />
+
+    <BannerAd ref={bannerRef} unitId={adUnitId} size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+
   </View>
 }
 

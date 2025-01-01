@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "원더윅스달력",
-    "slug": "원더윅스달력",
+    "slug": "wonder_weeks",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,6 +32,13 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-3739053005473702~5378208970",
+          "iosAppId": "ca-app-pub-3739053005473702~xxxxxx"
         }
       ]
     ],
