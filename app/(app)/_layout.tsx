@@ -51,11 +51,11 @@ export default function AppLayout() {
 
 
     if (loading) {
-        return <Text> 로딩 </Text>;
+        return <Text> </Text>;
     }
 
     if (!loaded) {
-        return <Text> 로딩 </Text>;
+        return <Text> </Text>;
     }
 
     if (!baby || baby.name === "") {
