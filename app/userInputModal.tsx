@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -10,8 +10,12 @@ export default function userInputModal() {
     const [isShowPicker, setIsShowPicker] = useState(false);
     const [name, setName] = useState(baby.name)
 
-    const handlePress = () => {
-        baby.setName(name);
+    const handlePress = async () => {
+        await baby.setName(name);
+        if( !baby.birthDay ){
+          Alert.alert('태어난 날을 입력해주세요');
+          return;
+        } 
         router.replace('/'); // 홈 화면으로 전환
     }
 
