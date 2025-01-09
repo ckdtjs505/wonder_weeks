@@ -36,7 +36,7 @@ export default function settings() {
 
       <View style={styles.row}>
         <TouchableOpacity onPress={handleChangeName}>
-          <Text style={styles.label}> 아이이름 변경하기 </Text>
+          <Text style={styles.label}> 아이정보 변경하기 </Text>
         </TouchableOpacity>
       </View>
 
