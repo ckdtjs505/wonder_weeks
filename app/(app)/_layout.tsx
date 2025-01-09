@@ -1,28 +1,27 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Redirect, router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useBabyInfo, useNotiInfo } from "@/store/store";
 import {
-  Alert,
-  Button,
-  Text,
-  Touchable,
+  GestureHandlerRootView,
   TouchableOpacity,
-  View,
-} from "react-native";
-import { useBabyInfo } from "@/store/store";
+} from "react-native-gesture-handler";
+import {
+  createDrawerNavigator,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import Home from ".";
+import settings from "./settings";
+
+import { Drawer } from "expo-router/drawer";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Colors } from "@/constants/Colors";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { MaterialIcons } from "@expo/vector-icons";
 
 /**
  * app 레이아웃
@@ -32,12 +31,14 @@ SplashScreen.preventAutoHideAsync();
 
 export default function AppLayout() {
   const baby = useBabyInfo();
+  const noti = useNotiInfo();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   const [loading, setLoading] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(noti.isOn);
 
   useEffect(() => {
     if (loaded) {
@@ -68,51 +69,79 @@ export default function AppLayout() {
     return <Redirect href="/userInputModal" />;
   }
 
-  console.log(baby);
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+    if (isEnabled) {
+      noti.off();
+    } else {
+      noti.on();
+    }
+  };
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DefaultTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen
+    <GestureHandlerRootView>
+      <Drawer
+        drawerContent={(props) => {
+          return (
+            <SafeAreaView>
+              <View style={styles.container}>
+                <Text style={styles.info}>아이 이름 : {baby.name}</Text>
+                <Text style={styles.info}>태어난 날 : {baby.birthDay} </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.list}
+                onPress={() => router.push("/userInputModal")}
+              >
+                <Text style={styles.listText}> 아이정보 변경하기 </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.list}
+                onPress={() => toggleSwitch()}
+              >
+                <Text style={styles.listText}>
+                  {isEnabled ? "알람 끄기" : "알림 켜기"}
+                </Text>
+              </TouchableOpacity>
+            </SafeAreaView>
+          );
+        }}
+      >
+        <Drawer.Screen
           name="index"
           options={{
-            headerShown: true,
             headerTitleAlign: "center",
             title: `${baby.name}'s 원더윅스`,
-            headerStyle: {
-              backgroundColor: Colors.theme[1],
-            },
-            headerTitleStyle: {
-              color: "#ffffff",
-            },
-            headerRight: (e) => (
-              <TouchableOpacity onPressIn={() => router.push("/settings")}>
-                <MaterialIcons
-                  name="settings"
-                  color={"white"}
-                  size={20}
-                ></MaterialIcons>
-              </TouchableOpacity>
-            ),
           }}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="settings"
-          options={{
-            headerShown: true,
-            headerTitleAlign: "center",
-            title: "설정",
-            headerStyle: {
-              backgroundColor: Colors.theme[1],
-            },
-            headerTitleStyle: {
-              color: "#ffffff",
-            },
-          }}
-        ></Stack.Screen>
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+        />
+      </Drawer>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    borderWidth: 0.5,
+    borderRadius: 5,
+    margin: 10,
+    padding: 5,
+  },
+
+  info: {
+    fontSize: 18,
+  },
+  list: {
+    marginTop: 0,
+    justifyContent: "center",
+    borderRadius: 10,
+    padding: 3,
+    height: 50,
+    margin: 10,
+    backgroundColor: Colors.theme[1],
+  },
+  listText: {
+    color: "#fff",
+    fontSize: 20,
+    textAlign: "center",
+  },
+});
