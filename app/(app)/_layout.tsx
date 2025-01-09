@@ -35,6 +35,7 @@ export default function AppLayout() {
     }, [loaded]);
 
     useEffect(() => {
+
         // API 호출
         const fetchData = async () => {
             try {
@@ -50,17 +51,16 @@ export default function AppLayout() {
     }, [loading]);
 
 
-    if (loading) {
-        return <Text> </Text>;
-    }
-
-    if (!loaded) {
+    if (!loaded && loading) {
         return <Text> </Text>;
     }
 
     if (!baby || baby.name === "") {
-        return <Redirect href="/userInputModal" />;
+        
+      return <Redirect href="/userInputModal" />;
     }
+
+    console.log(baby)
 
     return (
         <ThemeProvider value={colorScheme === 'dark' ? DefaultTheme : DefaultTheme}>
